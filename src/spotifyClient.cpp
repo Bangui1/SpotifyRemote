@@ -4,7 +4,7 @@
 
 String playUrl = "https://api.spotify.com/v1/me/player/play";
 String pauseUrl = "https://api.spotify.com/v1/me/player/pause";
-String playerUrl = "https://api.spotify.com/v1/me/player";
+String playerUrl = "https://api.spotify.com/v1/me/player"; // returns player info
 String skipNextUrl = "https://api.spotify.com/v1/me/player/next";
 String skipPreviousUrl = "https://api.spotify.com/v1/me/player/previous";
 String setVolumeUrl = "https://api.spotify.com/v1/me/player/volume?volume_percent=";

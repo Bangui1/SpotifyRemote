@@ -29,7 +29,7 @@ class SpotifyClient {
         String GetCurrentTrack();
 
     private:
-        WiFiClientSecure client;
+        WiFiClientSecure client; //to send requests
         String clientId;
         String clientSecret;
         String redirectUri;

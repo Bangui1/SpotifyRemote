@@ -23,7 +23,7 @@ AsyncWebServer server(80);
 SpotifyClient spotify = SpotifyClient(clientId, clientSecret, refreshToken);
 
 
-
+//authenticate to spotify, logging in and allowing the app to access the data
 bool authenticateSpotify(String code) {
   // Exchange authorization code for access token
   HTTPClient http;
@@ -65,10 +65,10 @@ String trackId;
 void setup() {
   Serial.begin(115200);
 
-
+  //setup receiver
   irReciever.enableIRIn();
   
-
+  //connect to wifi
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -80,6 +80,10 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   
+
+//webpage button to login to spotify
+//scopes used: user-read-private(access private playlists) user-read-email(required for it to work)
+//user-modify-playback-state(access to the player) user-library-modify(for liking songs) user-read-playback-state(for reading if paused, shuffle, etc.)
 /**
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     String html = "<html><body>";
@@ -91,6 +95,8 @@ void setup() {
     html += "</body></html>";
     request->send(200, "text/html", html);
   });
+
+
 
   server.on("/auth/callback", HTTP_GET, [](AsyncWebServerRequest *request){
     if (request->hasParam("code")) {
@@ -137,56 +143,56 @@ void loop() {
     Serial.println(irResults.value, HEX);
 
     switch (irResults.value){
-      case 0xFF38C7:
+      case 0xFF38C7: //ok
         togglePlayback();
         break;
-      case 0xFF5AA5:
+      case 0xFF5AA5: //right arrow
         spotify.SkipNext();
         break;
-      case 0xFF10EF:
+      case 0xFF10EF: //left arrow
         spotify.SkipPrevious();
         break;
-      case 0xFF6897:
+      case 0xFF6897: //*
         spotify.ToggleShuffle();
         break;
-      case 0xFFB04F:
+      case 0xFFB04F: //#
         spotify.ToggleRepeat();
         break;
-      case 0xFFA25D:
+      case 0xFFA25D: //1
         spotify.PlayContext("spotify:playlist:5zA2nl2MzTUDDzV0bQ4DVT");
         break;
-      case 0xFF18E7:
+      case 0xFF18E7: //up arrow
         spotify.VolumeUp();
         break;
-      case 0xFF4AB5:
+      case 0xFF4AB5: //down arrow
         spotify.VolumeDown();
         break;
-      case 0xFF9867:
+      case 0xFF9867: //0
         trackId = spotify.GetCurrentTrack();
         spotify.LikeCurrentSong(trackId);
         break;
-      case 0xFF629D:
+      case 0xFF629D: //2
         spotify.PlayContext("spotify:album:5VIQ3VaAoRKOEpJ0fewdvo");
         break;
-      case 0xFFE21D:
+      case 0xFFE21D: //3
         spotify.PlayContext("spotify:album:3xB3SzIEkry77YmregfUHZ");
         break;
-      case 0xFF22DD:
+      case 0xFF22DD://4
         spotify.PlayContext("spotify:album:5wtE5aLX5r7jOosmPhJhhk");
         break;
-      case 0xFF02FD:
+      case 0xFF02FD://5
         spotify.PlayContext("spotify:playlist:7xRSfX4ablccdanZY70lZ4");
         break;
-      case 0xFFC23D:
+      case 0xFFC23D://6
         spotify.PlayContext("spotify:album:0JeyP8r2hBxYIoxXv11XiX");
         break;
-      case 0xFFE01F:
+      case 0xFFE01F://7
         spotify.PlayTrack("spotify:track:0n89qPsABbCIG3psemdvfT");
         break;
-      case 0xFFA857:
+      case 0xFFA857://8
         spotify.PlayContext("spotify:album:1weenld61qoidwYuZ1GESA");
         break;
-      case 0xFF906F:
+      case 0xFF906F://9
         spotify.PlayTrack("spotify:track:21qnJAMtzC6S5SESuqQLEK");
         break;
       default:
